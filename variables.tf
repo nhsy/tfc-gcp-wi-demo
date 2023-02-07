@@ -56,12 +56,6 @@ variable "github_repo" {
   type        = string
 }
 
-variable "github_oauth_token_id" {
-  description = ""
-  type        = string
-}
-
-
 variable "github_oauth_token" {
   description = ""
   type        = string
