@@ -5,10 +5,10 @@ repos:
       - id: terraform_fmt
       - id: terraform_docs
 #      - id: terraform_tfsec
-#      - id: terraform_checkov
-#        args:
-#          - --args=--framework terraform
-#          - --args=--soft-fail
+      - id: terraform_checkov
+        args:
+          - --args=--framework terraform
+          - --args=--soft-fail
   - repo: meta
     hooks:
       - id: check-useless-excludes
