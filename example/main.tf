@@ -6,6 +6,11 @@ terraform {
       name = "tfc-gcp-wi-demo"
     }
   }
+
+  #    backend "gcs" {
+  #      bucket = "tfc-wi-demo-81359-tfstate"
+  #      prefix = "dev"
+  #    }
 }
 
 provider "google" {
