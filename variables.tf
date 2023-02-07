@@ -21,6 +21,11 @@ variable "tfc_project_name" {
   description = "The project under which a workspace will be created"
 }
 
+variable "tfc_project_id" {
+  type        = string
+  description = "The project id under which a workspace will be created"
+}
+
 variable "tfc_workspace_name" {
   type        = string
   description = "The name of the workspace that you'd like to create and connect to GCP"
@@ -58,5 +63,6 @@ variable "github_repo" {
 
 variable "github_oauth_token" {
   description = ""
+  default     = ""
   type        = string
 }

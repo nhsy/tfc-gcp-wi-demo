@@ -31,9 +31,16 @@ resource "tfe_workspace" "default" {
   name         = var.tfc_workspace_name
   organization = var.tfc_organization_name
 
+  auto_apply          = false
+  description         = "Terraform Cloud and GCP Workload Identity demo"
+  project_id          = var.tfc_project_id
   speculative_enabled = true
-  terraform_version   = "1.3.7"
-  trigger_patterns    = ["example/**"]
+  tag_names = [
+    "demo",
+    "gcp"
+  ]
+  terraform_version = "1.3.7"
+  trigger_patterns  = ["example/**"]
 
   vcs_repo {
     branch         = "main"
