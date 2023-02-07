@@ -50,3 +50,19 @@ variable "gcp_tfc_sa_roles" {
     "roles/viewer"
   ]
 }
+
+variable "github_repo" {
+  description = ""
+  type        = string
+}
+
+variable "github_oauth_token_id" {
+  description = ""
+  type        = string
+}
+
+
+variable "github_oauth_token" {
+  description = ""
+  type        = string
+}

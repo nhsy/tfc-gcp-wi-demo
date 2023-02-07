@@ -4,10 +4,43 @@
 # Runs in this workspace will be automatically authenticated
 # to GCP with the permissions set in the GCP policy.
 #
+
+data "tfe_organization" "default" {
+  name = var.tfc_organization_name
+}
+
+#resource tfe_oauth_client "default" {
+#  name = "github"
+#  api_url = "https://api.github.com"
+#  http_url = "https://github.com"
+#  service_provider = "github"
+#  organization = var.tfc_organization_name
+#  oauth_token = var.github_oauth_token
+#}
+
+# Connect TFC org to Github OAuth Apps
+# https://developer.hashicorp.com/terraform/cloud-docs/vcs/github
+data "tfe_oauth_client" "default" {
+  organization     = var.tfc_organization_name
+  service_provider = "github"
+  name             = "GitHub-OAuth"
+}
+
 # https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/workspace
 resource "tfe_workspace" "default" {
   name         = var.tfc_workspace_name
   organization = var.tfc_organization_name
+
+  speculative_enabled = true
+  terraform_version   = "1.3.7"
+  trigger_patterns    = ["example/**"]
+
+  vcs_repo {
+    branch         = "main"
+    identifier     = var.github_repo
+    oauth_token_id = data.tfe_oauth_client.default.oauth_token_id
+  }
+  working_directory = "example"
 }
 
 # The following variables must be set to allow runs
