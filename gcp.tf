@@ -79,6 +79,10 @@ resource "google_service_account_iam_member" "tfc" {
   service_account_id = google_service_account.tfc.name
   role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.tfc.name}/*"
+
+  depends_on = [
+    google_iam_workload_identity_pool_provider.tfc
+  ]
 }
 
 # Updates the IAM policy to grant the service account permissions
