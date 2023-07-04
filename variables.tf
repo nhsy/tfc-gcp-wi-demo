@@ -21,39 +21,15 @@ variable "tfc_project_name" {
   description = "The project under which a workspace will be created"
 }
 
-variable "tfc_project_id" {
-  type        = string
-  description = "The project id under which a workspace will be created"
-}
-
 variable "tfc_workspace_name" {
   type        = string
   description = "The name of the workspace that you'd like to create and connect to GCP"
+  default     = "tfc-gcp-wi-demo"
 }
 
 variable "gcp_project_id" {
   type        = string
   description = "The ID for your GCP project"
-}
-
-variable "gcp_service_list" {
-  description = "APIs required for the project"
-  type        = list(string)
-  default = [
-    "iam.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "sts.googleapis.com",
-    "iamcredentials.googleapis.com"
-  ]
-}
-
-variable "gcp_tfc_sa_roles" {
-  description = "TFC service account IAM roles"
-  type        = list(string)
-  default = [
-    "roles/storage.admin",
-    "roles/viewer"
-  ]
 }
 
 variable "github_repo" {

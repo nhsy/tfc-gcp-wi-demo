@@ -5,26 +5,22 @@
 # to GCP with the permissions set in the GCP policy.
 #
 
-data "tfe_organization" "default" {
-  name = var.tfc_organization_name
-}
-
-#resource tfe_oauth_client "default" {
-#  name = "github"
-#  api_url = "https://api.github.com"
-#  http_url = "https://github.com"
-#  service_provider = "github"
-#  organization = var.tfc_organization_name
-#  oauth_token = var.github_oauth_token
-#}
-
-# Connect TFC org to Github OAuth Apps
-# https://developer.hashicorp.com/terraform/cloud-docs/vcs/github
-data "tfe_oauth_client" "default" {
-  organization     = var.tfc_organization_name
-  service_provider = "github"
+resource "tfe_oauth_client" "default" {
   name             = "GitHub-OAuth"
+  api_url          = "https://api.github.com"
+  http_url         = "https://github.com"
+  service_provider = "github"
+  organization     = var.tfc_organization_name
+  oauth_token      = var.github_oauth_token
 }
+
+## Connect TFC org to Github OAuth Apps
+## https://developer.hashicorp.com/terraform/cloud-docs/vcs/github
+#data "tfe_oauth_client" "default" {
+#  organization     = var.tfc_organization_name
+#  service_provider = "github"
+#  name             = "GitHub-OAuth"
+#}
 
 # https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/workspace
 resource "tfe_workspace" "default" {
@@ -33,19 +29,20 @@ resource "tfe_workspace" "default" {
 
   auto_apply          = false
   description         = "Terraform Cloud and GCP Workload Identity demo"
-  project_id          = var.tfc_project_id
+  project_id          = data.tfe_project.default.id
   speculative_enabled = true
   tag_names = [
     "demo",
     "gcp"
   ]
-  terraform_version = "1.3.7"
+  terraform_version = "1.5.2"
   trigger_patterns  = ["example/**"]
 
   vcs_repo {
     branch         = "main"
     identifier     = var.github_repo
-    oauth_token_id = data.tfe_oauth_client.default.oauth_token_id
+    oauth_token_id = tfe_oauth_client.default.oauth_token_id
+    #    oauth_token_id = data.tfe_oauth_client.default.oauth_token_id
   }
   working_directory = "example"
 }
@@ -71,7 +68,7 @@ resource "tfe_variable" "tfc_gcp_project_number" {
   value    = data.google_project.project.number
   category = "env"
 
-  description = "The numeric identifier of the GCP project"
+  description = "The numeric identifier of the GCP project."
 }
 
 resource "tfe_variable" "tfc_gcp_workload_pool_id" {
@@ -115,3 +112,13 @@ resource "tfe_variable" "tfc_gcp_service_account_email" {
 
 #   description = "The value to use as the audience claim in run identity tokens"
 # }
+
+resource "tfe_variable" "tfc_gcp_project_id" {
+  workspace_id = tfe_workspace.default.id
+
+  key      = "project_id"
+  value    = var.gcp_project_id
+  category = "terraform"
+
+  description = "The GCP project id."
+}

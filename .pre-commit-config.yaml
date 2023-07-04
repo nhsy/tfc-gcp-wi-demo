@@ -1,14 +1,14 @@
 repos:
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.77.0
+    rev: v1.81.0
     hooks:
       - id: terraform_fmt
       - id: terraform_docs
 #      - id: terraform_tfsec
-      - id: terraform_checkov
-        args:
-          - --args=--framework terraform
-          - --args=--soft-fail
+#      - id: terraform_checkov
+#        args:
+#          - --args=--framework terraform
+#          - --args=--soft-fail
   - repo: meta
     hooks:
       - id: check-useless-excludes
